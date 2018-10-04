@@ -30,15 +30,16 @@ function setup(){
     canvas.mousePressed(getPixelValue);
     btnUpload = createFileInput(gotFile);
     btnUpload.parent('fileInput');
+    statusLabel = document.getElementById('statusLabel');
     btnClear = document.getElementById('clearTableBtn');
     btnClear.addEventListener('click', function(){
-        if(btnClear.classList[1] === "is-warning"){
-            btnClear.classList.remove("is-warning");
-            btnClear.classList.add("is-danger");
+        if(btnClear.classList[2] === "is-outlined"){
+            btnClear.classList.remove("is-outlined");
+            statusLabel.innerHTML = 'Click one more time the "CLEAR" button to wipe out all the data and refresh the page.';
         } else {
             table.clearRows();
             counterLabel.value = table.getRowCount();
-            btnClear.classList.add("is-warning");
+            location.reload();
         }
     })
 
@@ -52,6 +53,7 @@ function setup(){
     downloadTableBtn.addEventListener("click", function(){
         saveTable(table,'pixeldata.csv')
     });
+
 }
 
 
@@ -77,21 +79,19 @@ function gotFile(file){
             console.log('Y: '+sideSize/aspectRatio)
             console.log('AR: '+aspectRatio)
             image(img, 0, 0, canvas.width, canvas.height);
-            thereIsImage = true;
+            //thereIsImage = true;
         })
     }
 }
 
 function getPixelValue(){
+
     let posX = [-1, 0, 1, -1, 0, 1, -1, 0, 1];
     let posY = [-1, -1, -1, 0, 0, 0, 1, 1, 1];
     let pointerX = floor(mouseX);
     let pointerY = floor(mouseY);
 
     let timestamp = new Date();
-
-    counter += 1;
-    
     let newRow = table.addRow();
     
     newRow.set('LABEL', pixelLabel.value)
@@ -110,6 +110,13 @@ function getPixelValue(){
             console.log(RGBA)
         }
     }
+    
     newRow.set('RECORD', table.getRowCount())
     counterLabel.value = table.getRowCount();
+    if(table.getRowCount() === 0){
+        btnClear.disabled = true;
+    } else {
+        btnClear.disabled = false;
+    }
+    
 }

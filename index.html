@@ -62,8 +62,9 @@
                   </div>
 
 
-                  <button class="button is-success" id="downloadTableBtn"><b>Download</b></button>
-                  <button class="button is-warning" id="clearTableBtn"><b>Clear</b></button>
+                  <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
+                  <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
+                  <div id="statusLabel"></div>
               </div>
             </div>
 
@@ -92,7 +93,7 @@
                 <ul>
                   <li>As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will keep track of the pixels even after loading a new image. So feel free to process as many images as you want. </li>
                   <li>Use as many labels as you want in the order you want. An empty label results in an empty entry in the output file.</li>
-                  <li>Clearing the records requires two clicks. You will see that the button changes from yellow (warning) to red (danger). This is to minimize the risk that you accidentally clear up all the records. After the second click there is now way to recover your data.</li>
+                  <li>The "clear" button removes the image in the canvas and all the records. To clear everything requires two clicks. You will see that the button changes color. This is to minimize the risk that you accidentally clear up all the records. After the second click there is now way to recover your data.</li>
                 </ul>
 
             </div>

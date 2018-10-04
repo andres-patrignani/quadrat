@@ -1,2 +1,2 @@
-# pixellabel
-A web tool for labeling and saving pixel information
+# pixlabel
+A web-tool for rapid and accurate custom labeling image pixels
