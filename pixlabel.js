@@ -1,17 +1,15 @@
-function preload(){
-
-}
-
+let img;
 let canvas;
 let loadedImg;
-let thereIsImage = false;
-let counter = 0;
+let filename;
+let totalcols;
+let totalrows;
 let table = new p5.Table();
-table.addColumn('RECORD');
-table.addColumn('LABEL');
-table.addColumn('X');
-table.addColumn('Y');
-table.addColumn('TIMESTAMP');
+
+function preload(){
+    img = loadImage('public/img/example.jpg');
+}
+
 for(let i=0; i<9; i++){
     let posPix = i + 1;
     table.addColumn('R'+posPix);
@@ -23,7 +21,6 @@ for(let i=0; i<9; i++){
 
 function setup(){
     canvasElement = document.getElementById('canvas');
-
     pixelDensity(1);
     canvas = createCanvas(canvasElement.offsetWidth,windowHeight*0.7);
     canvas.parent('canvas');
@@ -35,13 +32,22 @@ function setup(){
     btnClear.addEventListener('click', function(){
         if(btnClear.classList[2] === "is-outlined"){
             btnClear.classList.remove("is-outlined");
-            statusLabel.innerHTML = 'Click one more time the "CLEAR" button to wipe out all the data and refresh the page.';
+            statusLabel.innerHTML = 'Click one more time the "CLEAR" button to wipe out all records and refresh the page.';
         } else {
             table.clearRows();
             counterLabel.value = table.getRowCount();
             location.reload();
         }
     })
+
+    table.addColumn('RECORD');
+    table.addColumn('FILENAME');
+    table.addColumn('LABEL');
+    table.addColumn('COL');
+    table.addColumn('ROW');
+    table.addColumn('TOTALCOLS');
+    table.addColumn('TOTALROWS');
+    table.addColumn('TIMESTAMP');
 
     background(250)
     cursor(CROSS)
@@ -51,9 +57,10 @@ function setup(){
     counterLabel = document.getElementById("counterLabel");
     downloadTableBtn = document.getElementById("downloadTableBtn");
     downloadTableBtn.addEventListener("click", function(){
-        saveTable(table,'pixeldata.csv')
+        saveTable(table,'pixlabel.csv')
     });
-
+    
+    loadImageToCanvas(img)
 }
 
 
@@ -68,20 +75,16 @@ function draw() {
 
 function gotFile(file){
     if (file.type === 'image'){
-        loadImage(file.data,function(img){
-            loadedImg = img;
-            aspectRatio = img.width / img.height;
-            sideSize = canvasElement.offsetWidth;
-            canvas.resize(sideSize, sideSize/aspectRatio);
-            console.log(img.width)
-            console.log(img.height)
-            console.log('X: '+sideSize)
-            console.log('Y: '+sideSize/aspectRatio)
-            console.log('AR: '+aspectRatio)
-            image(img, 0, 0, canvas.width, canvas.height);
-            //thereIsImage = true;
-        })
+        filename = file.name;
+        loadImage(file.data,loadImageToCanvas);
     }
+}
+
+function loadImageToCanvas(img){
+    aspectRatio = img.width / img.height;
+    sideSize = floor(canvasElement.offsetWidth);
+    canvas.resize(sideSize, floor(sideSize/aspectRatio));
+    image(img, 0, 0, canvas.width, canvas.height);
 }
 
 function getPixelValue(){
@@ -93,10 +96,13 @@ function getPixelValue(){
 
     let timestamp = new Date();
     let newRow = table.addRow();
-    
+    newRow.set('FILENAME', filename)
     newRow.set('LABEL', pixelLabel.value)
-    newRow.set('X', pointerX);
-    newRow.set('Y', pointerY);
+    newRow.set('COL', pointerX);
+    newRow.set('ROW', pointerY);
+    newRow.set('TOTALROWS', canvas.height);
+    newRow.set('TOTALCOLS', canvas.width);
+
     newRow.set('TIMESTAMP', timestamp.toISOString());
 
     for(let i = 0; i < 9; i++){

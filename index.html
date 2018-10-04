@@ -5,24 +5,11 @@
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
     <title>Canopeo</title>
     <link rel="stylesheet" href="public/css/bulma.min.css">
+    <link rel="stylesheet" href="public/css/pixlabel.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="p5/p5.min.js"></script>
     <script src="p5/addons/p5.dom.min.js"></script>
     <script src="pixlabel.js"></script>
-    <style>
-      hr{
-        margin: 5px 5px 5px 0px;
-        background-color:deeppink;
-      }
-      .pixStyle{
-        color:deeppink;
-        font-weight: bolder;
-      }
-      .labelStyle{
-        color:rgb(50, 50, 50);
-        font-weight: bolder;
-
-      }
-    </style>
 
   </head>
   <body>
@@ -31,9 +18,10 @@
         <section class="hero">
             <div class="hero-body">
                 <div class="container">
-                <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span></h1>
-                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom labeling image pixels</b></h2>
-                <p class="is-marginless">We built this tool to rapidly collect (by hand) massive amounts of ground-truth pixel information to use in machine learning.</p>
+                <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
+                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom labeling pixels</b></h2>
+                <p class="is-marginless">We built this tool to rapidly collect (by hand) massive amounts of ground-truth pixel-level data.</p>
+                <p>You can collect data for use in machine learning, fit logistic regression models, or inspect color thresholds.</p>
                 </div>
             </div>
           </section>
@@ -100,14 +88,9 @@
 
             <div style="margin-top: 20px; margin-bottom: 20px;">
               <p>If you have suggestions for improvements or want to report a bug, please send me an email to:
-                <i>andrespatrignani@ksu.edu</i>
+                <i>andrespatrignani<span class="pixStyle">@</span>ksu.edu</i>
               </p>
             </div>
         </div>
-     
-
-
-
-
   </body>
 </html>
