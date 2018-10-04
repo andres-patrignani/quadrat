@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <title>Canopeo</title>
+    <link rel="stylesheet" href="public/css/bulma.min.css">
+    <script src="p5/p5.min.js"></script>
+    <script src="p5/addons/p5.dom.min.js"></script>
+    <script src="pixlabel.js"></script>
+    <style>
+      hr{
+        margin: 5px 5px 5px 0px;
+        background-color:deeppink;
+      }
+      .pixStyle{
+        color:deeppink;
+        font-weight: bolder;
+      }
+      .labelStyle{
+        color:rgb(50, 50, 50);
+        font-weight: bolder;
+
+      }
+    </style>
+
+  </head>
+  <body>
+      <div class="container">
+        <!-- Banner -->
+        <section class="hero">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span></h1>
+                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom labeling image pixels</b></h2>
+                <p class="is-marginless">We built this tool to rapidly collect (by hand) massive amounts of ground-truth pixel information to use in machine learning.</p>
+                </div>
+            </div>
+          </section>
+
+          <div class="columns is-desktop is-tablet is-centered">
+              <div class="column is-four-fifths">
+                  <div id=canvas></div>
+              </div>
+              <div class="column is-one-fifth">
+                  <div class="field">
+                      <label for="counterLabel"><b>Records</b></label>
+                    <div class="control">
+                        <input class="input" type="text" id="counterLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
+                    </div>
+                  </div>
+                  <br/>
+                  <div class="field">
+                    <label class="label" for="pixelLabel">Pixel label</label>
+                    <div class="control">
+                      <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
+                    </div>
+                  </div>
+
+                  <div class="field" style="margin-top: 50px; margin-bottom: 50px;">
+                      <div id="fileInput" class="control"></div>
+                  </div>
+
+
+                  <button class="button is-success" id="downloadTableBtn"><b>Download</b></button>
+                  <button class="button is-warning" id="clearTableBtn"><b>Clear</b></button>
+              </div>
+            </div>
+
+            <h2 class="title">Instructions</h2>
+            <hr/>
+            <div class="content">
+                <ul>
+                    <li>
+                      <b>Step 1:</b> Load an image from your local hard drive.
+                    </li>
+                    <li>
+                      <b>Step 2:</b> Enter a label. Literally, it can be anything: plants, soil, rocks, elfs, etc. Make sure you don't misspell the label.
+                    </li>
+                    <li>
+                        <b>Step 3:</b> Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
+                        and RGBA (red, green, blue, alpha) values for a 3 by 3 square, taking the mouse pointer as the center pixel.
+                    </li>
+                    <li>
+                      <b>Step 4:</b> Download collected data in .CSV format.
+                    </li>
+                </ul>
+
+                <br/>
+
+                <h5 class="subtitle is-5"><b>Important notes</b></h5>
+                <ul>
+                  <li>As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will keep track of the pixels even after loading a new image. So feel free to process as many images as you want. </li>
+                  <li>Use as many labels as you want in the order you want. An empty label results in an empty entry in the output file.</li>
+                  <li>Clearing the records requires two clicks. You will see that the button changes from yellow (warning) to red (danger). This is to minimize the risk that you accidentally clear up all the records. After the second click there is now way to recover your data.</li>
+                </ul>
+
+            </div>
+
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+              <p>If you have suggestions for improvements or want to report a bug, please send me an email to:
+                <i>andrespatrignani@ksu.edu</i>
+              </p>
+            </div>
+        </div>
+     
+
+
+
+
+  </body>
+</html>
