@@ -3,11 +3,12 @@ let canvas;
 let filename;
 let totalcols;
 let totalrows;
-let table = new p5.Table();
+let table;
 let zoomCheckbox;
 let cursorPosition;
 let cursorColorValue;
 let cursorColorBackground;
+let pixelArrayValue;
 
 function preload(){
     img = loadImage('public/img/example.jpg');
@@ -15,12 +16,36 @@ function preload(){
 
 
 function setup(){
+    pixelDensity(1);
 
     canvasElement = document.getElementById('canvas');
-    pixelDensity(1);
     canvas = createCanvas(canvasElement.offsetWidth,windowHeight*0.7);
     canvas.parent('canvas');
     canvas.mousePressed(getPixelValue);
+
+    pixelArrayElement = document.getElementById('pixelArray');
+    pixelArrayValue = parseFloat(pixelArrayElement.value);
+    setTableRows(pixelArrayValue);
+    pixelArray.addEventListener('change',function(){
+
+        if(recordLabel.value == 0){
+            r = true;
+        } else {
+            let r = confirm('This action will delete ' + recordLabel.value + ' records');
+        }
+
+        if (r == true) {
+            pixelArrayValue = parseFloat(pixelArrayElement.value);
+            setTableRows(pixelArrayValue);
+            recordLabel.value = table.getRowCount();
+            console.log(pixelArrayValue)
+        }
+    })
+
+    
+
+    
+
     btnUpload = createFileInput(gotFile);
     btnUpload.parent('fileInput');
     statusLabel = document.getElementById('statusLabel');
@@ -29,39 +54,21 @@ function setup(){
     cursorColorBackground = document.getElementById('cursorColorBackground');
     zoomCheckbox = document.getElementById('zoomCheckbox');
     btnClear = document.getElementById('clearTableBtn');
+
     btnClear.addEventListener('click', function(){
-        if(btnClear.classList[2] === "is-outlined"){
-            btnClear.classList.remove("is-outlined");
-            statusLabel.innerHTML = 'Click one more time the "CLEAR" button to wipe out all records and refresh the page.';
-        } else {
-            table.clearRows();
-            counterLabel.value = table.getRowCount();
-            location.reload();
+        if(recordLabel.value > 0){
+            let r = confirm('Click OK to confirm the deletion of ' + recordLabel.value + ' records.');
+            if (r == true) {
+                table.clearRows();
+                recordLabel.value = table.getRowCount();
+                btnClear.disabled = true;
+                //location.reload();
+            }
         }
     })
-
-    table.addColumn('RECORD');
-    table.addColumn('FILENAME');
-    table.addColumn('LABEL');
-    table.addColumn('COL');
-    table.addColumn('ROW');
-    table.addColumn('TOTALCOLS');
-    table.addColumn('TOTALROWS');
-    table.addColumn('TIMESTAMP');
-    for(let i=0; i<9; i++){
-        let posPix = i + 1;
-        table.addColumn('R'+posPix);
-        table.addColumn('G'+posPix);
-        table.addColumn('B'+posPix);
-        table.addColumn('A'+posPix);
-    }
-
-    background(250)
     cursor(CROSS)
-    textSize(32);
-    text('Load an image to start', canvasElement.offsetWidth/2-200, windowHeight*0.7/2);
     pixelLabel = document.getElementById("pixelLabel");
-    counterLabel = document.getElementById("counterLabel");
+    recordLabel = document.getElementById("recordLabel");
     downloadTableBtn = document.getElementById("downloadTableBtn");
     downloadTableBtn.addEventListener("click", function(){
         saveTable(table,'pixlabel.csv')
@@ -83,11 +90,36 @@ function draw() {
         drawOnce = false;
     }
 
-    cursorPosition.innerHTML = 'ROW: ' + mouseY + '   ' + 'COL: ' + mouseX;
-
     let RGBA = get(mouseX, mouseY);
-    cursorColorValue.innerHTML = 'R: ' + RGBA[0] + '  ' + 'G: ' + RGBA[1] + '  ' + 'B: ' + RGBA[2] + '  ' + 'A: ' + RGBA[3];
-    cursorColorBackground.style.backgroundColor =  color(RGBA[0], RGBA[1], RGBA[2], RGBA[3])
+    if(mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height){
+        cursorPosition.innerHTML = 'ROW: ' + mouseY + '   ' + 'COL: ' + mouseX;
+        cursorColorValue.innerHTML = 'R: ' + RGBA[0] + '  ' + 'G: ' + RGBA[1] + '  ' + 'B: ' + RGBA[2] + '  ' + 'A: ' + RGBA[3];
+        cursorColorBackground.style.backgroundColor =  color(RGBA[0], RGBA[1], RGBA[2], RGBA[3])
+    } else {
+        cursorPosition.innerHTML = 'ROW: ' + '' + '   ' + 'COL: ' + '';
+        cursorColorValue.innerHTML = 'R: ' + '' + '  ' + 'G: ' + '' + '  ' + 'B: ' + '' + '  ' + 'A: ' + '';
+        cursorColorBackground.style.backgroundColor =  color(255, 255, 255, 255)
+    }
+}
+
+
+function setTableRows(pixels){
+    table = new p5.Table();
+    table.addColumn('RECORD');
+    table.addColumn('FILENAME');
+    table.addColumn('LABEL');
+    table.addColumn('COL');
+    table.addColumn('ROW');
+    table.addColumn('TOTALCOLS');
+    table.addColumn('TOTALROWS');
+    table.addColumn('TIMESTAMP');
+    for(let i = 0; i < pixels; i++){
+        let posPix = i + 1;
+        table.addColumn('R'+posPix);
+        table.addColumn('G'+posPix);
+        table.addColumn('B'+posPix);
+        table.addColumn('A'+posPix);
+    }
 }
 
 function gotFile(file){
@@ -106,8 +138,16 @@ function loadImageToCanvas(img){
 
 function getPixelValue(){
 
-    let posX = [-1, 0, 1, -1, 0, 1, -1, 0, 1];
-    let posY = [-1, -1, -1, 0, 0, 0, 1, 1, 1];
+    let posX;
+    let posY;
+    if(pixelArrayValue === 9.0){
+        posX = [-1, 0, 1, -1, 0, 1, -1, 0, 1];
+        posY = [-1, -1, -1, 0, 0, 0, 1, 1, 1];
+    } else if(pixelArrayValue === 1.0){
+        posX = [1];
+        posY = [1];
+    }
+
     let pointerX = floor(mouseX);
     let pointerY = floor(mouseY);
 
@@ -121,20 +161,17 @@ function getPixelValue(){
     newRow.set('TOTALCOLS', canvas.width);
     newRow.set('TIMESTAMP', timestamp.toISOString());
 
-    for(let i = 0; i < 9; i++){
+    for(let i = 0; i < pixelArrayValue; i++){
         let posPix = i + 1;
         let RGBA = get(pointerX+posX[i], pointerY+posY[i])
         newRow.set('R'+posPix, RGBA[0]);
         newRow.set('G'+posPix, RGBA[1]);
         newRow.set('B'+posPix, RGBA[2]);
         newRow.set('A'+posPix, RGBA[3]);
-        if(i==4){
-            console.log(RGBA)
-        }
     }
     
     newRow.set('RECORD', table.getRowCount())
-    counterLabel.value = table.getRowCount();
+    recordLabel.value = table.getRowCount();
     if(table.getRowCount() === 0){
         btnClear.disabled = true;
     } else {

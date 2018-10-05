@@ -19,9 +19,9 @@
             <div class="hero-body">
                 <div class="container">
                 <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
-                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom labeling pixels</b></h2>
+                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom pixel labeling</b></h2>
                 <p class="is-marginless">We built this tool to rapidly collect (by hand) massive amounts of ground-truth pixel-level data.</p>
-                <p>You can collect data for use in machine learning, fit logistic regression models, or inspect color thresholds.</p>
+                <p>You can collect data for machine learning projects, logistic regression models, or simply inspect color thresholds.</p>
                 </div>
             </div>
           </section>
@@ -31,20 +31,33 @@
                   <div id=canvas></div>
               </div>
               <div class="column is-one-fifth">
-                  <div class="field" style="margin-top: 10px; margin-bottom: 10px;">
+                  <label for="fileInput"><b>Upload your own image</b></label>
+                  <div class="field" style="margin-bottom: 20px;">
                       <div id="fileInput" class="control" style="color:deeppink;"></div>
                   </div>
+
+                  <label for="pixelArray"><b>Pixel array</b></label>
+                  <div class="select" style="margin-bottom: 20px;">
+                    
+                    <select id="pixelArray">
+                      <option value="9">3 by 3 area</option>
+                      <option value="1">Single pixel</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label for="pixelLabel"><b>Pixel label</b></label>
+                    <div class="control">
+                      <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
+                    </div>
+                  </div>
+
+                  <br/>
+
                   <div class="field">
                       <label for="counterLabel"><b>Records</b></label>
                     <div class="control">
-                        <input class="input" type="text" id="counterLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
-                    </div>
-                  </div>
-                  <br/>
-                  <div class="field">
-                    <label class="label" for="pixelLabel">Pixel label</label>
-                    <div class="control">
-                      <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
+                        <input class="input" type="text" id="recordLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
                     </div>
                   </div>
 
@@ -55,10 +68,11 @@
                   </label>
 
                   
-                  <div style="margin-top: 20px;">
-                      <div id="cursorPosition"></div>
-                      <div id="cursorColorValue"></div>
-                      <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
+                  <div style="margin-top: 30px;">
+                    <label><b>Cursor info</b></label>
+                    <div id="cursorPosition"></div>
+                    <div id="cursorColorValue"></div>
+                    <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
                   </div>
 
 
@@ -66,9 +80,6 @@
 
                   <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
                   <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
-                  <div id="statusLabel"></div>
-
-
               </div>
             </div>
 
@@ -80,14 +91,17 @@
                       <b>Step 1:</b> Load an image from your local hard drive.
                     </li>
                     <li>
-                      <b>Step 2:</b> Enter a label. Literally, it can be anything: plants, soil, rocks, elfs, etc. Make sure you don't misspell the label.
+                      <b>Step 2:</b> Select a pixel array.
                     </li>
                     <li>
-                        <b>Step 3:</b> Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
-                        and RGBA (red, green, blue, alpha) values for a 3 by 3 square, taking the mouse pointer as the center pixel.
+                      <b>Step 3:</b> Enter a label. Literally, it can be anything: plants, soil, rocks, elfs, etc. Make sure you don't misspell the label.
                     </li>
                     <li>
-                      <b>Step 4:</b> Download collected data in .CSV format.
+                        <b>Step 4:</b> Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
+                        and RGBA (red, green, blue, alpha) values for a 3 by 3 square or a single pixel, always taking the mouse crosshair as the center pixel.
+                    </li>
+                    <li>
+                      <b>Step 5:</b> Download collected data in .CSV format.
                     </li>
                 </ul>
 
@@ -97,17 +111,13 @@
                 <ul>
                   <li>As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will keep track of the pixels even after loading a new image. So feel free to process as many images as you want. </li>
                   <li>Use as many labels as you want in the order you want. An empty label results in an empty entry in the output file.</li>
-                  <li>The "clear" button removes the image in the canvas and all the records. To clear everything requires two clicks. You will see that the button changes color. This is to minimize the risk that you accidentally clear up all the records. After the second click there is now way to recover your data.</li>
                   <li>
-                    Pixel order is as follows: <br/>
+                    Pixel order when selecting a "3 by 3" pixel array is as follows: <br/>
                     <img src="public/img/cell3by3.jpg" width=128> <br/>
                     where cell number 5 is the center of crosshair cursor. File column variable names are labeled following this convention,
                     thus column "R1" represents the red value for the first cell.
                   </li>
-
-
                 </ul>
-
             </div>
 
             <div style="margin-top: 20px; margin-bottom: 20px;">
