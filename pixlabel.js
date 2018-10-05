@@ -94,7 +94,7 @@ function draw() {
 
     let RGBA = get(mouseX, mouseY);
     if(mouseX >= 0 && mouseX <= canvas.width && mouseY >= 0 && mouseY <= canvas.height){
-        cursorPosition.innerHTML = 'ROW: ' + mouseY + '   ' + 'COL: ' + mouseX;
+        cursorPosition.innerHTML = 'ROW: ' + floor(mouseY) + '   ' + 'COL: ' + floor(mouseX);
         cursorColorValue.innerHTML = 'R: ' + RGBA[0] + '  ' + 'G: ' + RGBA[1] + '  ' + 'B: ' + RGBA[2] + '  ' + 'A: ' + RGBA[3];
         cursorColorBackground.style.backgroundColor =  color(RGBA[0], RGBA[1], RGBA[2], RGBA[3])
     } else {
