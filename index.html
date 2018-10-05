@@ -31,6 +31,9 @@
                   <div id=canvas></div>
               </div>
               <div class="column is-one-fifth">
+                  <div class="field" style="margin-top: 10px; margin-bottom: 10px;">
+                      <div id="fileInput" class="control" style="color:deeppink;"></div>
+                  </div>
                   <div class="field">
                       <label for="counterLabel"><b>Records</b></label>
                     <div class="control">
@@ -45,14 +48,27 @@
                     </div>
                   </div>
 
-                  <div class="field" style="margin-top: 50px; margin-bottom: 50px;">
-                      <div id="fileInput" class="control"></div>
+                  <br/>
+
+                  <label class="checkbox">
+                    <input type="checkbox" id="zoomCheckbox">&nbsp; Zoom area <br/>
+                  </label>
+
+                  
+                  <div style="margin-top: 20px;">
+                      <div id="cursorPosition"></div>
+                      <div id="cursorColorValue"></div>
+                      <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
                   </div>
 
+
+                  <br/>
 
                   <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
                   <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
                   <div id="statusLabel"></div>
+
+
               </div>
             </div>
 

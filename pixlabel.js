@@ -1,25 +1,21 @@
 let img;
 let canvas;
-let loadedImg;
 let filename;
 let totalcols;
 let totalrows;
 let table = new p5.Table();
+let zoomCheckbox;
+let cursorPosition;
+let cursorColorValue;
+let cursorColorBackground;
 
 function preload(){
     img = loadImage('public/img/example.jpg');
 }
 
-for(let i=0; i<9; i++){
-    let posPix = i + 1;
-    table.addColumn('R'+posPix);
-    table.addColumn('G'+posPix);
-    table.addColumn('B'+posPix);
-    table.addColumn('A'+posPix);
-}
-
 
 function setup(){
+
     canvasElement = document.getElementById('canvas');
     pixelDensity(1);
     canvas = createCanvas(canvasElement.offsetWidth,windowHeight*0.7);
@@ -28,6 +24,10 @@ function setup(){
     btnUpload = createFileInput(gotFile);
     btnUpload.parent('fileInput');
     statusLabel = document.getElementById('statusLabel');
+    cursorPosition = document.getElementById('cursorPosition');
+    cursorColorValue = document.getElementById('cursorColorValue');
+    cursorColorBackground = document.getElementById('cursorColorBackground');
+    zoomCheckbox = document.getElementById('zoomCheckbox');
     btnClear = document.getElementById('clearTableBtn');
     btnClear.addEventListener('click', function(){
         if(btnClear.classList[2] === "is-outlined"){
@@ -48,6 +48,13 @@ function setup(){
     table.addColumn('TOTALCOLS');
     table.addColumn('TOTALROWS');
     table.addColumn('TIMESTAMP');
+    for(let i=0; i<9; i++){
+        let posPix = i + 1;
+        table.addColumn('R'+posPix);
+        table.addColumn('G'+posPix);
+        table.addColumn('B'+posPix);
+        table.addColumn('A'+posPix);
+    }
 
     background(250)
     cursor(CROSS)
@@ -60,23 +67,33 @@ function setup(){
         saveTable(table,'pixlabel.csv')
     });
     
-    loadImageToCanvas(img)
+    loadImageToCanvas(img);
+    filename = 'example.jpg';
 }
 
-
+let drawOnce = false;
 function draw() {
-    // if(thereIsImage){
-    //     clear()
-    //     image(loadedImg, 0, 0, canvas.width, canvas.height);
-    //     image(loadedImg, mouseX-80, mouseY-80, 160, 160, mouseX*loadedImg.width/canvas.width-9, mouseY*loadedImg.height/canvas.height-9, 19, 19);
-    //     //console.log(mouseX*(loadedImg.width/canvas.width))
-    // }
+    //image(img, 0, 0, 99, 99, (mouseX-100)*img.width/canvas.width-20, mouseY*img.height/canvas.height-20, 40, 40);
+    //image(img, 0, 100, 99, 99, (mouseX-100)*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
+    if(zoomCheckbox.checked){
+        image(img, 0, 0, 150, 150, mouseX*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
+        drawOnce = true;
+    } else if(!zoomCheckbox.checked && drawOnce){
+        image(img, 0, 0, canvas.width, canvas.height);
+        drawOnce = false;
+    }
+
+    cursorPosition.innerHTML = 'ROW: ' + mouseY + '   ' + 'COL: ' + mouseX;
+
+    let RGBA = get(mouseX, mouseY);
+    cursorColorValue.innerHTML = 'R: ' + RGBA[0] + '  ' + 'G: ' + RGBA[1] + '  ' + 'B: ' + RGBA[2] + '  ' + 'A: ' + RGBA[3];
+    cursorColorBackground.style.backgroundColor =  color(RGBA[0], RGBA[1], RGBA[2], RGBA[3])
 }
 
 function gotFile(file){
     if (file.type === 'image'){
         filename = file.name;
-        loadImage(file.data,loadImageToCanvas);
+        img = loadImage(file.data,loadImageToCanvas);
     }
 }
 
@@ -102,7 +119,6 @@ function getPixelValue(){
     newRow.set('ROW', pointerY);
     newRow.set('TOTALROWS', canvas.height);
     newRow.set('TOTALCOLS', canvas.width);
-
     newRow.set('TIMESTAMP', timestamp.toISOString());
 
     for(let i = 0; i < 9; i++){
