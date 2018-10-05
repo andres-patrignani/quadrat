@@ -26,25 +26,22 @@ function setup(){
     pixelArrayElement = document.getElementById('pixelArray');
     pixelArrayValue = parseFloat(pixelArrayElement.value);
     setTableRows(pixelArrayValue);
-    pixelArray.addEventListener('change',function(){
 
+    pixelArray.addEventListener('change',function(){
+        let r;
         if(recordLabel.value == 0){
             r = true;
         } else {
-            let r = confirm('This action will delete ' + recordLabel.value + ' records');
+            r = confirm('This action will delete ' + recordLabel.value + ' records');
         }
-
         if (r == true) {
             pixelArrayValue = parseFloat(pixelArrayElement.value);
             setTableRows(pixelArrayValue);
             recordLabel.value = table.getRowCount();
-            console.log(pixelArrayValue)
+            //console.log(pixelArrayValue)
         }
     })
 
-    
-
-    
 
     btnUpload = createFileInput(gotFile);
     btnUpload.parent('fileInput');
