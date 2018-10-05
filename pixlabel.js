@@ -84,6 +84,8 @@ function draw() {
     //image(img, 0, 100, 99, 99, (mouseX-100)*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
     if(zoomCheckbox.checked){
         image(img, 0, 0, 150, 150, mouseX*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
+        stroke(0);
+        line(75,0,75,74)
         drawOnce = true;
     } else if(!zoomCheckbox.checked && drawOnce){
         image(img, 0, 0, canvas.width, canvas.height);
