@@ -16,115 +16,121 @@
       <div class="container">
         <!-- Banner -->
         <section class="hero">
-            <div class="hero-body" style="padding-left: 0px;">
-                <div class="container">
-                <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
-                <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom pixel labeling</b></h2>
-                <p class="is-marginless">We built this tool to rapidly collect (by hand) massive amounts of ground-truth pixel-level data.</p>
-                <p>You can collect data for machine learning projects, logistic regression models, or simply count objects in your images.</p>
+          <div class="hero-body" style="padding-left: 0px;">
+              <div class="container">
+              <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
+              <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom pixel labeling</b></h2>
+              <p class="is-marginless">You can collect data for machine learning projects, logistic regression models, or simply count objects in your images.</p>
+              </div>
+          </div>
+        </section>
+
+        <div class="columns is-desktop is-tablet is-centered">
+            <div class="column is-four-fifths">
+                <div id=canvas></div>
+            </div>
+            <div class="column is-one-fifth">
+                <label for="fileInput"><b>Upload your own image</b></label>
+                <div class="field" style="margin-bottom: 20px;">
+                    <div id="fileInput" class="control" style="color:deeppink;"></div>
                 </div>
-            </div>
-          </section>
 
-          <div class="columns is-desktop is-tablet is-centered">
-              <div class="column is-four-fifths">
-                  <div id=canvas></div>
-              </div>
-              <div class="column is-one-fifth">
-                  <label for="fileInput"><b>Upload your own image</b></label>
-                  <div class="field" style="margin-bottom: 20px;">
-                      <div id="fileInput" class="control" style="color:deeppink;"></div>
+                <label for="pixelArray"><b>Pixel array</b></label><br/>
+                <div class="select" style="margin-bottom: 20px;">
+                  <select id="pixelArray">
+                    <option value="1">Single pixel</option>
+                    <option value="9">3 by 3 area</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="pixelLabel"><b>Pixel label</b></label>
+                  <div class="control">
+                    <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
                   </div>
-
-                  <label for="pixelArray"><b>Pixel array</b></label><br/>
-                  <div class="select" style="margin-bottom: 20px;">
-                    <select id="pixelArray">
-                      <option value="1">Single pixel</option>
-                      <option value="9">3 by 3 area</option>
-                    </select>
-                  </div>
-
-                  <div class="field">
-                    <label for="pixelLabel"><b>Pixel label</b></label>
-                    <div class="control">
-                      <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
-                    </div>
-                  </div>
-
-                  <br/>
-
-                  <div class="field">
-                      <label for="counterLabel"><b>Records</b></label>
-                    <div class="control">
-                        <input class="input" type="text" id="recordLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
-                    </div>
-                  </div>
-
-                  <br/>
-
-                  <label class="checkbox">
-                    <input type="checkbox" id="zoomCheckbox">&nbsp; Zoom area <br/>
-                  </label>
-
-                  
-                  <div style="margin-top: 30px;">
-                    <label><b>Cursor info</b></label>
-                    <div id="cursorPosition"></div>
-                    <div id="cursorColorValue"></div>
-                    <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
-                  </div>
-
-
-                  <br/>
-
-                  <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
-                  <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
-              </div>
-            </div>
-
-            <h2 class="title">Instructions</h2>
-            <hr/>
-            <div class="content">
-                <ul>
-                    <li>
-                      <b>Step 1:</b> Load an image from your local hard drive.
-                    </li>
-                    <li>
-                      <b>Step 2:</b> Select a pixel array.
-                    </li>
-                    <li>
-                      <b>Step 3:</b> Enter a label. Literally, it can be anything: plants, soil, rocks, elfs, etc.  When you are done
-                      with this label simply write a different label and keep going. Just make sure you don't misspell the label.
-                    </li>
-                    <li>
-                        <b>Step 4:</b> Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
-                        and RGBA (red, green, blue, alpha) values for a 3 by 3 square or a single pixel, always taking the mouse crosshair as the center pixel.
-                    </li>
-                    <li>
-                      <b>Step 5:</b> Download collected data in .CSV format.
-                    </li>
-                </ul>
+                </div>
 
                 <br/>
 
-                <h5 class="subtitle is-5"><b>Important notes</b></h5>
-                <ul>
-                  <li>As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will keep track of the pixels even after loading a new image. So feel free to process as many images as you want. </li>
-                  <li>Use as many labels as you want in the order you want. An empty label results in an empty entry in the output file.</li>
-                  <li>
-                    Pixel order when selecting a "3 by 3" pixel array is as follows: <br/>
-                    <img src="public/img/cell3by3.jpg" width=128> <br/>
-                    where cell number 5 is the center of crosshair cursor. File column variable names are labeled following this convention,
-                    thus column "R1" represents the red value for the first cell.
-                  </li>
-                </ul>
-            </div>
+                <div class="field">
+                    <label for="counterLabel"><b>Records</b></label>
+                  <div class="control">
+                      <input class="input" type="text" id="recordLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
+                  </div>
+                </div>
 
-            <div style="margin-top: 20px; margin-bottom: 20px;">
-              <p>If you have suggestions for improvements or want to report a bug, please send me an email to:
-                <i>andrespatrignani<span class="pixStyle">@</span>ksu.edu</i>
-              </p>
-            </div>
+                <br/>
+
+                <label class="checkbox">
+                  <input type="checkbox" id="zoomCheckbox">&nbsp; Zoom area <br/>
+                </label>
+
+                
+                <div style="margin-top: 30px;">
+                  <label><b>Cursor info</b></label>
+                  <div id="cursorPosition"></div>
+                  <div id="cursorColorValue"></div>
+                  <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
+                </div>
+
+
+                <br/>
+
+                <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
+                <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
+            </div> <!-- end one-fifth-->
+        </div> <!-- end main -->
+
+        <h2 class="title">Instructions</h2>
+        <hr/>
+      
+        <p>
+          Play with the example picture to learn how to use the web-app. Try writing a label like "red shorts" and selecting pixels on the image
+          the belong to red shorts. Then change the label to something else like "sand" and select few pixels on the beach. Once you have collected 
+          few records, download and inspect the comma separated values (.CSV) file.
+        </p>
+        <br/>
+        <p>
+          <b>Step 1</b><br/>
+          Load an image from your local hard drive.
+        </p>
+        <br/>
+        <p>
+          <b>Step 2</b><br/>
+          Select a pixel array. A "Single pixel" means that with every click the app stores pixel information (red, green, blue, and alpha channels)
+          for the selected pixel. A "3 by 3 pixel area" means that the app will store not only the pixel information of the selected pixel,
+          but also the color information of the surrounding pixels, as illustrated in the figure below. Each number represents the order in the output file.
+          For instance, in the .CSV file, column "R1" represents the red value for the first cell.<br/>
+          <img src="public/img/cell3by3.jpg" width=128> <br/>
+        </p>
+        <br/>
+        <p>
+          <b>Step 3</b><br/>
+          Enter a label, just write it, no need to press the Enter key. You can literally enter anything: flower, soil, rocks, elfs.  When you are done
+          with this label simply write a different label and keep selecting pixels that belong to that label. Just make sure you don't misspell the label.
+          If you don't enter any label the app will simply enter a blank cell in the output file.
+        </p>
+        <br/>
+        <p>
+            <b>Step 4</b><br/>
+            Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
+            and RGBA (red, green, blue, alpha) values for a 3 by 3 square or a single pixel, always taking the mouse crosshair as the center pixel.
+        </p>
+        <br/>
+        <p>
+          <b>Step 5</b><br/>
+          Download collected data in .CSV format. The output file is just a table. 
+          As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will 
+          keep track of selected pixels for multiple images. So feel free to process as many images as you want. </li>
+        </p>
+        
+    
+
+        <div style="margin-top: 20px; margin-bottom: 20px;">
+          <p>If you have suggestions for improvements or want to report a bug, please send me an email to:
+            <i>andrespatrignani<span class="pixStyle">@</span>ksu.edu</i>
+          </p>
         </div>
+    </div>
   </body>
 </html>
