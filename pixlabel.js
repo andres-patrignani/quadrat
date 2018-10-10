@@ -11,7 +11,7 @@ let cursorColorBackground;
 let pixelArrayValue;
 
 function preload(){
-    img = loadImage('public/img/example.jpg');
+    img = loadImage('public/img/hubble.jpg');
 }
 
 
@@ -70,6 +70,15 @@ function setup(){
     downloadTableBtn.addEventListener("click", function(){
         saveTable(table,'pixlabel.csv')
     });
+
+    tickMarkLabel = document.getElementById("tickMarkLabel");
+    pixelLabel.addEventListener('keyup', function(){
+        setTimeout(function(){ tickMarkLabel.innerHTML = '&#x2713;' }, 1000);
+    })
+
+    pixelLabel.addEventListener('keydown', function(){
+        tickMarkLabel.innerHTML = ''
+    })
     
     loadImageToCanvas(img);
     filename = 'example.jpg';
@@ -81,9 +90,10 @@ function draw() {
     //image(img, 0, 100, 99, 99, (mouseX-100)*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
     if(zoomCheckbox.checked){
         image(img, 0, 0, 150, 150, mouseX*img.width/canvas.width-10, mouseY*img.height/canvas.height-10, 20, 20);
-        stroke(0);
+        stroke(color(255,0,0,255));
         line(75,0,75,74)
         drawOnce = true;
+
     } else if(!zoomCheckbox.checked && drawOnce){
         image(img, 0, 0, canvas.width, canvas.height);
         drawOnce = false;
@@ -113,11 +123,11 @@ function setTableRows(pixels){
     table.addColumn('TOTALROWS');
     table.addColumn('TIMESTAMP');
     for(let i = 0; i < pixels; i++){
-        let posPix = i + 1;
-        table.addColumn('R'+posPix);
-        table.addColumn('G'+posPix);
-        table.addColumn('B'+posPix);
-        table.addColumn('A'+posPix);
+        let colNumber = i + 1;
+        table.addColumn('R' + colNumber);
+        table.addColumn('G' + colNumber);
+        table.addColumn('B' + colNumber);
+        //table.addColumn('A'+posPix);
     }
 }
 
@@ -139,12 +149,20 @@ function getPixelValue(){
 
     let posX;
     let posY;
-    if(pixelArrayValue === 9.0){
+    if(pixelArrayValue === 49.0){
+        posX = [-3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3];
+        posY = [-3, -3, -3, -3, -3, -3, -3, -2, -2, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3];
+    }
+    else if(pixelArrayValue === 25.0){
+        posX = [-2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2];
+        posY = [-2, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2];
+    }
+    else if(pixelArrayValue === 9.0){
         posX = [-1, 0, 1, -1, 0, 1, -1, 0, 1];
         posY = [-1, -1, -1, 0, 0, 0, 1, 1, 1];
     } else if(pixelArrayValue === 1.0){
-        posX = [1];
-        posY = [1];
+        posX = [0];
+        posY = [0];
     }
 
     let pointerX = floor(mouseX);
@@ -161,12 +179,12 @@ function getPixelValue(){
     newRow.set('TIMESTAMP', timestamp.toISOString());
 
     for(let i = 0; i < pixelArrayValue; i++){
-        let posPix = i + 1;
-        let RGBA = get(pointerX+posX[i], pointerY+posY[i])
-        newRow.set('R'+posPix, RGBA[0]);
-        newRow.set('G'+posPix, RGBA[1]);
-        newRow.set('B'+posPix, RGBA[2]);
-        newRow.set('A'+posPix, RGBA[3]);
+        let colNumber = i + 1;
+        let RGBA = get(pointerX + posX[i], pointerY + posY[i])
+        newRow.set('R' + colNumber, RGBA[0]);
+        newRow.set('G' + colNumber, RGBA[1]);
+        newRow.set('B' + colNumber, RGBA[2]);
+        //newRow.set('A'+posPix, RGBA[3]);
     }
     
     newRow.set('RECORD', table.getRowCount())

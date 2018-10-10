@@ -20,7 +20,7 @@
               <div class="container">
               <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
               <h2 class="subtitle is-marginless"><b>A web-tool for rapid and accurate custom pixel labeling</b></h2>
-              <p class="is-marginless">You can collect data for machine learning projects, logistic regression models, or simply count objects in your images.</p>
+              <p class="is-marginless">You can collect data for machine learning projects, logistic regression models, or simply count galaxies.</p>
               </div>
           </div>
         </section>
@@ -39,14 +39,16 @@
                 <div class="select" style="margin-bottom: 20px;">
                   <select id="pixelArray">
                     <option value="1">Single pixel</option>
-                    <option value="9">3 by 3 area</option>
+                    <option value="9">3x3 pixels</option>
+                    <option value="25">5x5 pixels</option>
+                    <option value="49">7x7 pixels</option>
                   </select>
                 </div>
 
                 <div class="field">
-                  <label for="pixelLabel"><b>Pixel label</b></label>
+                  <label for="pixelLabel"><b>Pixel label &nbsp; <span id="tickMarkLabel" style="color: rgb(4, 218, 4);">&#x2713;</span></b></label>
                   <div class="control">
-                    <input class="input" type="text" id="pixelLabel" placeholder="Add your own label">
+                    <input class="input" type="text" id="pixelLabel" placeholder="Add a label e.g. Orion">
                   </div>
                 </div>
 
@@ -62,9 +64,10 @@
                 <br/>
 
                 <label class="checkbox">
-                  <input type="checkbox" id="zoomCheckbox">&nbsp; Zoom area <br/>
+                  <input type="checkbox" id="zoomCheckbox" checked>&nbsp; Zoom area <br/>
                 </label>
 
+                <br/>
                 
                 <div style="margin-top: 30px;">
                   <label><b>Cursor info</b></label>
@@ -81,56 +84,81 @@
             </div> <!-- end one-fifth-->
         </div> <!-- end main -->
 
+        <div>
+
         <h2 class="title">Instructions</h2>
         <hr/>
-      
-        <p>
-          Play with the example picture to learn how to use the web-app. Try writing a label like "red shorts" and selecting pixels on the image
-          the belong to red shorts. Then change the label to something else like "sand" and select few pixels on the beach. Once you have collected 
-          few records, download and inspect the comma separated values (.CSV) file.
-        </p>
+  
         <br/>
+
         <p>
           <b>Step 1</b><br/>
-          Load an image from your local hard drive.
+          Load an image from your local hard drive or play with the example picture.
         </p>
+
         <br/>
+
         <p>
           <b>Step 2</b><br/>
-          Select a pixel array. A "Single pixel" means that with every click the app stores pixel information (red, green, blue, and alpha channels)
-          for the selected pixel. A "3 by 3 pixel area" means that the app will store not only the pixel information of the selected pixel,
-          but also the color information of the surrounding pixels, as illustrated in the figure below. Each number represents the order in the output file.
-          For instance, in the .CSV file, column "R1" represents the red value for the first cell.<br/>
-          <img src="public/img/cell3by3.jpg" width=128> <br/>
-        </p>
+          <img src="public/img/cell3by3.jpg" style="float:right;" width="100" height="100">
+          Select a pixel array. A "Single pixel" means that information is recorded only for the pixel right underneath the crosshair cursor. 
+          Depending on the application, users might be interested in knowing the color value of neighboring pixels. So, you can also choose
+          to record information in a 3x3, 5x5, and 7x7 pixel area. The central pixel is always the pixel under the crosshair cursor.
+          The order in which pixels are recorded is illustrated with the 3x3 pixel area.
+          </p>
         <br/>
         <p>
           <b>Step 3</b><br/>
-          Enter a label, just write it, no need to press the Enter key. You can literally enter anything: flower, soil, rocks, elfs.  When you are done
-          with this label simply write a different label and keep selecting pixels that belong to that label. Just make sure you don't misspell the label.
-          If you don't enter any label the app will simply enter a blank cell in the output file.
+          Write a label, no need to press the Enter key. You can literally enter anything: Andromeda, flower, soil, elfs.  Labels can have spaces. 
+          When you are done with the current label just write a new one and keep selecting pixels.
         </p>
         <br/>
         <p>
             <b>Step 4</b><br/>
-            Start clicking on the areas of the image that represent the label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
-            and RGBA (red, green, blue, alpha) values for a 3 by 3 square or a single pixel, always taking the mouse crosshair as the center pixel.
+            Click on the areas of the image that represent the current label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
+            and RGB (red, green, and blue) color values.
         </p>
         <br/>
         <p>
           <b>Step 5</b><br/>
-          Download collected data in .CSV format. The output file is just a table. 
-          As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will 
-          keep track of selected pixels for multiple images. So feel free to process as many images as you want. </li>
+          Download the comma-separated values (CSV) file. You can open this file with a text editor or MS Excel.
         </p>
+
+        <br/>
+
+        <article class="message is-info">
+          <div class="message-header">
+            <p>Additional notes</p>
+          </div>
+          <div class="message-body">
+            <ol>
+              <li>
+                  If you just want to count objects you can ignore the RGB data.
+              </li>
+                <li>
+                  Image names should not contain commas.
+                </li>
+                <li>
+                  As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will 
+                store the records for multiple images.
+                </li>
+                <li>
+                  Make sure you don't misspell the label. If you don't enter any label the app will enter a blank cell in the output file.
+                </li>
+
+            </ul>
+          </div>
+        </article>
         
+        <br/>
     
 
         <div style="margin-top: 20px; margin-bottom: 20px;">
-          <p>If you have suggestions for improvements or want to report a bug, please send me an email to:
+          <p>If you have suggestions for improvement, want to report a bug, or just want to share how you are using <span class="pixStyle">pix</span><span class="labelStyle">label</span>, please send me an email to:
             <i>andrespatrignani<span class="pixStyle">@</span>ksu.edu</i>
           </p>
         </div>
+      </div>
     </div>
   </body>
 </html>
