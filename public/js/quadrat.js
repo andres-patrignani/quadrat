@@ -14,7 +14,7 @@ let activeLabelColor;
 let tableLabels;
 let quadrat = {'description':'', 'rows':0, 'columns':0, 'grid':[]};
 let labels = {};
-let filename = 'dandelions.jpg';
+let filename = 'Dandelions.jpg';
 
 
 function preload(){
