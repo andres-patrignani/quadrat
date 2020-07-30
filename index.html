@@ -1,176 +1,196 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126565767-3"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'UA-126565767-3');
     </script>
+-->
 
     <meta charset="utf-8">
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
     <meta content="pixel, labels, rgb, rgba, red, green, blue, colors, machine learning, classification, convolutional neural networks, sampling points, count objects, count plants, count rocks, count seeds, classify ecology images, classify cover crops" name="keywords">
     <meta content="A web tool for rapidly classifying objects and collecting ground-truth data for machine learning projects" name="description">
-    <title>pixlabel</title>
-    <link rel="stylesheet" href="public/css/bulma.min.css">
-    <link rel="stylesheet" href="public/css/pixlabel.css">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <title>Quadrat</title>
+    <link rel="stylesheet" href="public/css/quadrat.css">
+    <link rel="stylesheet" href="public/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&display=swap" rel="stylesheet">
     <script src="p5/p5.min.js"></script>
-    <script src="p5/addons/p5.dom.min.js"></script>
-    <script src="pixlabel.js"></script>
-
   </head>
+
   <body>
-      <div class="container">
-        <!-- Banner -->
-        <section class="hero">
-          <div class="hero-body" style="padding-left: 0px;">
-              <div class="container">
-              <h1 class="title is-1"><span class="pixStyle">pix</span><span class="labelStyle">label</span><small style="font-size: 0.8rem">&nbsp; v1.0</small></h1>
-              <h2 class="subtitle is-marginless"><b>A web-tool for rapid custom pixel labeling</b></h2>
-              <p class="is-marginless">Examine pixel color, count objects, or collect lots of ground-truth data for machine learning projects.</p>
-              </div>
+
+    <div class="container">
+
+      <!-- Banner -->
+      <div>
+        <h1 class="title" style="margin-bottom: 0px;">Quadrat</h1>
+        <h6 class="subtitle col m9" style="margin-top: 0px;">An interactive frame for environmental research</h6>
+      </div>
+
+      <!-- Main tool area -->
+      <div class="row" style="margin-top: 40px;">
+
+        <!-- Left control panel -->
+        <div class="col s3">
+
+          <label class="btn-flat col s12 m12 white" id="uploadImageBtn" style="margin-bottom: 10px; padding:0px; color: black; font-weight:bolder;"><span class="bullet">1.</span>Load Image</label>
+          <label class="btn-flat col s12 m12 white modal-trigger" id="createGridBtn" href="#modal-create-grid" style="margin-bottom:10px;padding:0px; color: black; font-weight:bolder;"><span class="bullet">2.</span>Generate Grid</label>
+          <label class="btn-flat col s12 m12 white modal-trigger" id="createLabelBtn" href="#modal-create-label" style="margin-bottom:10px;padding:0px; color: black; font-weight:bolder;"><span class="bullet">3.</span>Add Label</label>
+
+          <!-- Mode selection -->
+          <div style=" margin-top: 80px !important">
+            <label style="padding-right: 25px;">
+              <input class="with-gap radio-blue-grey" name="modeControls" id="highlightGrid" value="highlightGrid" type="radio" checked />
+              <span style="padding-left: 25px;">Highlight</span>
+            </label>
+            <label>
+              <input class="with-gap" name="modeControls" id="eraseGrid"  value="eraseGrid" type="radio" />
+              <span style="padding-left: 25px;">Erase</span>
+            </label>
           </div>
-        </section>
-
-        <div class="columns is-desktop is-tablet is-centered">
-            <div class="column is-four-fifths">
-                <div id=canvas></div>
-            </div>
-            <div class="column is-one-fifth">
-                <label for="fileInput"><b>Upload your own image</b></label>
-                <div class="field" style="margin-bottom: 20px;">
-                    <div id="fileInput" class="control" style="color:deeppink;"></div>
-                </div>
-
-                <label for="pixelArray"><b>Pixel array</b></label><br/>
-                <div class="select" style="margin-bottom: 20px;">
-                  <select id="pixelArray">
-                    <option value="1">Single pixel</option>
-                    <option value="9">3x3 pixels</option>
-                    <option value="25">5x5 pixels</option>
-                    <option value="49">7x7 pixels</option>
-                  </select>
-                </div>
-
-                <div class="field">
-                  <label for="pixelLabel"><b>Pixel label &nbsp; <span id="tickMarkLabel" style="color: rgb(4, 218, 4);">&#x2713;</span></b></label>
-                  <div class="control">
-                    <input class="input" type="text" id="pixelLabel" placeholder="Add a label e.g. Orion">
-                  </div>
-                </div>
-
-                <br/>
-
-                <div class="field">
-                    <label for="counterLabel"><b>Records</b></label>
-                  <div class="control">
-                      <input class="input" type="text" id="recordLabel" value="0" readonly style="font-Size: calc(8px + 4vw);"/>
-                  </div>
-                </div>
-
-                <br/>
-
-                <label class="checkbox">
-                  <input type="checkbox" id="zoomCheckbox" checked>&nbsp; Zoom area <br/>
-                </label>
-
-                <br/>
-                
-                <div style="margin-top: 30px;">
-                  <label><b>Cursor info</b></label>
-                  <div id="cursorPosition"></div>
-                  <div id="cursorColorValue"></div>
-                  <div id="cursorColorBackground" style="height: 20px; width:100%;"></div>
-                </div>
 
 
-                <br/>
+          <!-- User defined labels-->
+          <table class="col s12 m12 l12" id="table-labels" style="display: none; margin-top: 50px;">
+            <colgroup>
+              <col span="1" style="width: 5%;">
+              <col span="1" style="width: 40%;">
+              <col span="1" style="width: 40%;">
+              <col span="1" style="width: 15%;">
+            </colgroup>
 
-                <button class="button is-success is-outlined" id="downloadTableBtn"><b>Download</b></button>
-                <button class="button is-danger is-outlined" id="clearTableBtn" disabled><b>Clear</b></button>
-            </div> <!-- end one-fifth-->
-        </div> <!-- end main -->
+            <thead width='100%'>
+              <tr>
+                  <th class="left-align"></th>
+                  <th class="left-align">Label</th>
+                  <th class="center-align">Cover <span class="hide-on-small-only">%</span></th>
+                  <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
 
-        <div>
+        </div>
 
-        <h2 class="title">Instructions</h2>
-        <hr/>
-  
-        <br/>
+        <!-- Right image panel -->
+        <div class="col s9">
+          <div id="canvas" oncontextmenu="return false;"></div>
 
-        <p>
-          <b>Step 1</b><br/>
-          Load an image from your local hard drive or play with the example picture.
-        </p>
-
-        <br/>
-
-        <p>
-          <b>Step 2</b><br/>
-          <img src="public/img/cell3by3.jpg" style="float:right;" width="100" height="100">
-          Select a pixel array. A "Single pixel" means that information is recorded only for the pixel right underneath the crosshair cursor. 
-          Depending on the application, users might be interested in knowing the color value of neighboring pixels. So, you can also choose
-          to record information in a 3x3, 5x5, and 7x7 pixel area. The central pixel is always the pixel under the crosshair cursor.
-          The order in which pixels are recorded is illustrated with the 3x3 pixel area.
-          </p>
-        <br/>
-        <p>
-          <b>Step 3</b><br/>
-          Write a label, no need to press the Enter key. You can literally enter anything: Andromeda, flower, soil, elfs.  Labels can have spaces. 
-          When you are done with the current label just write a new one and keep selecting pixels.
-        </p>
-        <br/>
-        <p>
-            <b>Step 4</b><br/>
-            Click on the areas of the image that represent the current label. <span class="pixStyle">pix</span><span class="labelStyle">label</span> will record the timestamp, row, column, 
-            and RGB (red, green, and blue) color values.
-        </p>
-        <br/>
-        <p>
-          <b>Step 5</b><br/>
-          Download the comma-separated values (CSV) file. You can open this file with a text editor or MS Excel.
-        </p>
-
-        <br/>
-
-        <article class="message is-info">
-          <div class="message-header">
-            <p>Additional notes</p>
+          <div class="col m12 right-align" id="downloadControls" style="margin-top: 10px; display: none;">
+            <a class="btn col s12 m2 offset-m6 white" id="downloadImageBtn" style="margin-bottom: 10px; padding:0px; color: black; font-weight:bolder;">Canvas</a>
+            <a class="btn col s12 m2 white" id="downloadTableBtn" style="margin-bottom: 10px; padding:0px; color: black; font-weight:bolder;">Table</a>
+            <a class="btn col s12 m2 white" id="downloadJSONBtn" style="margin-bottom: 10px; padding:0px; color: black; font-weight:bolder;">JSON</a>  
           </div>
-          <div class="message-body">
-            <ol>
-              <li>
-                  If you just want to count objects you can ignore the RGB data.
-              </li>
-                <li>
-                  Image names should not contain commas.
-                </li>
-                <li>
-                  As long as you don't refresh the page, <span class="pixStyle">pix</span><span class="labelStyle">label</span> will 
-                store the records for multiple images.
-                </li>
-                <li>
-                  Make sure you don't misspell the label. If you don't enter any label the app will enter a blank cell in the output file.
-                </li>
-
-            </ul>
-          </div>
-        </article>
-        
-        <br/>
-    
-
-        <div style="margin-top: 20px; margin-bottom: 20px;">
-          <p>If you have suggestions for improvement, want to report a bug, or just want to share how you are using <span class="pixStyle">pix</span><span class="labelStyle">label</span>, please send me an email to:
-            <i>andrespatrignani<span class="pixStyle">@</span>ksu.edu</i>
-          </p>
         </div>
       </div>
     </div>
+
+    <footer style="margin-top: 50px;">
+      <div class="footer-copyright">
+        <div class="container">
+        © 2020 Copyright Andres Patrignani
+        <a class="right" style="color: #651fff" href="https://github.com/andres-patrignani/etcrop">Github</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal Grid -->
+    <div id="modal-create-grid" class="modal col s6 m6">
+      <div class="modal-content container">
+
+        <h4>Create new grid</h4>
+        <table id="table-create-grid">
+          <colgroup>
+            <col span="1" style="width: 50%;">
+            <col span="1" style="width: 50%;">
+          </colgroup>
+          <tr>
+            <td style="padding-right: 15px !important;">
+              <label>Rows</label>
+              <input value="10" id="gridRows" type="number" min="3" max="25" onkeydown="return false">
+            </td>
+            <td style="padding-left: 15px !important;">
+              <label>Columns</label>
+              <input value="10" id="gridColumns" type="number" min="3" max="25" onkeydown="return false">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <label>Quadrat description</label>
+              <input id="quadratDescription" type="text">
+            </td>
+          </tr>
+        </table>
+      
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close btn green darken-6 col s6" id="addGridBtn">Create grid</a>
+      </div>
+    </div>
+
+      <!-- Modal Labels -->
+      <div id="modal-create-label" class="modal col s6 m6">
+        <div class="modal-content container">
+
+          <h4>Create new label</h4>
+
+          <table id="table-create-label">
+            <colgroup>
+              <col span="1" style="width: 80%;">
+              <col span="1" style="width: 20%;">
+           </colgroup>
+            <tr>
+              <td style="padding-right: 10px;">
+                <label>Label name</label>
+                <input placeholder="Dandelions" id="labelName" type="text" maxlength="12" required>
+              </td>
+              <td>
+                <label>Label color</label>
+                <input type="color" value="#ff3d00" id="labelColor" style="width: 100%; height: 50px">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <label>Label description</label>
+                <input id="labelDescription" type="text">
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <a class="modal-close btn green darken-6 col s6" id="addLabelBtn">Add label</a>
+        </div>
+      </div>
+     
+
+  <script src="public/js/materialize.min.js"></script>
+  <script src="public/js/quadrat.js"></script>
+  <script>  
+
+    //Sidenav
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {'edge':'right'});
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems);
+    });
+
+  </script>
+
   </body>
 </html>

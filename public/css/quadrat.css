@@ -1,0 +1,82 @@
+body{
+    font-family: 'Aldrich', sans-serif;
+}
+
+nav {
+    background-color: #1b1b1b !important;
+    height: 50px !important;
+    color: #651fff !important;
+}
+
+nav a {
+    height:30px !important;
+}
+
+a.sidenav-trigger{
+    line-height: 0px !important;
+}
+
+option {
+    font-family: 'Aldrich', sans-serif !important;
+}
+
+.title{
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: #2e2c30;
+
+}
+
+.subtitle{
+    font-size: 1.2rem;
+    font-weight: 200;
+    color:#651fff;
+}
+
+.bullet {
+    color:#651fff;
+    padding-right: 5px;
+}
+
+#table-labels {
+    width: 100%;  
+    padding: 0px;
+}
+
+
+#table-labels td,th{
+    padding: 0px !important;
+    border-radius: 0px;
+}
+
+
+.selected-label {
+    background-color: rgb(238, 237, 237);
+    color: black;
+}
+
+
+#table-create-grid tr {
+    border: none;
+}
+
+#table-create-label tr {
+    border: none;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn {
+    border: 1px solid #651fff50 !important;
+}
+
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
+    border: 2px solid #651fff !important;
+}
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:after {
+    background-color: #651fff !important;
+}
